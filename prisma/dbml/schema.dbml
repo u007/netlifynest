@@ -1,0 +1,101 @@
+//// ------------------------------------------------------
+//// THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+//// ------------------------------------------------------
+
+Table Team {
+  id String [pk]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [not null]
+  ownerId String [not null]
+  owner User [not null]
+  userId String [not null]
+}
+
+Table Role {
+  id String [pk]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [not null]
+  ownerId String [not null]
+  owner User [not null]
+
+  indexes {
+    (ownerId, name) [unique]
+  }
+}
+
+Table User {
+  id String [pk]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  email String [unique, not null]
+  password String [not null]
+  firstname String
+  lastname String
+  roles String[] [not null]
+  ownedRoles Role [not null]
+  posts Post [not null]
+  teams String[] [not null]
+  Team Team [not null]
+}
+
+Table Post {
+  id String [pk]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  published Boolean [not null]
+  title String [not null]
+  content String
+  authorId String [not null]
+  author User
+}
+
+Table Product {
+  photos Photo[] [not null]
+  id String [pk]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  name String [not null]
+  skuCode String [not null]
+  price String [not null]
+  currency Currency [not null]
+  priceType PriceType [not null]
+  quantity Int [not null]
+  description String
+  barcode String [not null]
+  uom Uom [not null]
+  itemColor ItemColor [not null]
+  unitName String [not null]
+}
+
+Enum Uom {
+  Unit
+  Liter
+  Milliliter
+  Gram
+}
+
+Enum Currency {
+  MYR
+  USD
+  SGD
+  EUR
+}
+
+Enum ItemColor {
+  Yellow
+  Red
+  Blue
+  White
+}
+
+Enum PriceType {
+  Retail_Selling_Price
+}
+
+Ref: Team.userId > User.id
+
+Ref: Role.ownerId > User.id
+
+Ref: Post.authorId > User.id
